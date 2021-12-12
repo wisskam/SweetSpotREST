@@ -1,7 +1,7 @@
 <template>
   <v-row align="end">
     <v-col class="text-center" v-for="book in books" :key="book.id">
-      <Card title="test" imageUrl="https://cdn.vuetifyjs.com/images/cards/cooking.png"/>
+      <Card :title=book.name :imageUrl=book.imageUrl :description=book.description :subtitle = book.subtitle />
     </v-col>
   </v-row>
 </template>
@@ -24,6 +24,5 @@ export default {
       this.books = books
     }
   }
-
 }
 </script>

@@ -24,6 +24,13 @@ public class BookService {
         if (book.getModified() == null) {
             book.setModified(new Date());
         }
+        if(book.getId() == null){
+            book.setCreated(new Date());
+        }
+        else{
+            Book existingBook = this.find(book.getId());
+            book.setCreated(existingBook.getCreated());
+        }
         bookRepository.save(book);
     }
 

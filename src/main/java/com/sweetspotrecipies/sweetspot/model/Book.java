@@ -9,16 +9,22 @@ public class Book {
     private Date createdAt;
     private Date modifiedAt;
     private String name;
+    private String subtitle;
+    private String description;
+    private String imageUrl;
     private int userID;
 
 
     public Book(Date modified) {
         this.modifiedAt = modified;
     }
-    public Book(Date created, Date modified, String firstName, int userID) {
+    public Book(Date created, Date modified, String name, String description, String subtitle, String imageUrl, int userID) {
         this.createdAt = created;
         this.modifiedAt = modified;
-        this.name = firstName;
+        this.name = name;
+        this.description    = description;
+        this.subtitle       = subtitle;
+        this.imageUrl       = imageUrl;
         this.userID = userID;
     }
 
@@ -60,4 +66,20 @@ public class Book {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Column(name = "description")
+    public String getDescription() {
+        return this.description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Column(name = "subtitle")
+    public String getSubtitle() {        return subtitle;    }
+    public void setSubtitle(String subtitle) {        this.subtitle = subtitle;    }
+
+    @Column(name = "imageUrl")
+    public String getImageUrl() {return imageUrl;}
+    public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
 }

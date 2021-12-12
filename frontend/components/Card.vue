@@ -38,7 +38,7 @@
       </v-row>
 
       <div class="my-4 text-subtitle-1">
-        {{ autor }}
+        {{ owner }}
       </div>
 
       <div>{{ description }}</div>
@@ -78,6 +78,6 @@ export default {
       selected: null
     }
   },
-  props: ['title', 'subtitle', 'description', 'autor', 'rating', 'imageUrl']
+  props: ['title', 'subtitle', 'description', 'owner', 'rating', 'imageUrl']
 }
 </script>

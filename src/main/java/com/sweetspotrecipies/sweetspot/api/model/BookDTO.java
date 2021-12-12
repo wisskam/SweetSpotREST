@@ -5,9 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BookDTO {
     @JsonProperty("id")
     private Integer id;
-
     @JsonProperty("name")
     private String name;
+    @JsonProperty("description")
+    private String description;
+    @JsonProperty("subtitle")
+    private String subtitle;
+    @JsonProperty("imageUrl")
+    private String imageUrl;
+    
     public Integer getId() {
         return id;
     }
@@ -15,13 +21,41 @@ public class BookDTO {
     public void setId(Integer id) {
         this.id = id;
     }
-    @JsonProperty("name")
+
     public String getName() {
         return name;
     }
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
+    }
+
+    @JsonProperty("description")
+    public String getDescription() {
+        return description;
+    }
+    @JsonProperty("description")
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    @JsonProperty("subtitle")
+    public String getSubtitle() {
+        return subtitle;
+    }
+    @JsonProperty("subtitle")
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    @JsonProperty("imageUrl")
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    @JsonProperty("imageUrl")
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
 
