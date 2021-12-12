@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = { "http://localhost:8081" })
+@CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
 @RequestMapping("${url.prefix.api.v1}/book")
 public class RestBookController {
