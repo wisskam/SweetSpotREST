@@ -1,6 +1,8 @@
 package com.sweetspotrecipies.sweetspot.model;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "book")
@@ -12,20 +14,23 @@ public class Book {
     private String subtitle;
     private String description;
     private String imageUrl;
-    private int userID;
+
+    private Set<Recipe> recipes = new HashSet<>();
+//    private User user;
+
 
 
     public Book(Date modified) {
         this.modifiedAt = modified;
     }
-    public Book(Date created, Date modified, String name, String description, String subtitle, String imageUrl, int userID) {
+    public Book(Date created, Date modified, String name, String description, String subtitle, String imageUrl /*, int userID */) {
         this.createdAt = created;
         this.modifiedAt = modified;
         this.name = name;
         this.description    = description;
         this.subtitle       = subtitle;
         this.imageUrl       = imageUrl;
-        this.userID = userID;
+//        this.userID = userID;
     }
 
     public Book() {
@@ -82,4 +87,17 @@ public class Book {
     @Column(name = "imageUrl")
     public String getImageUrl() {return imageUrl;}
     public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
+
+    @OneToMany(mappedBy = "book")
+    public Set<Recipe> getRecipes() {
+        return recipes;
+    }
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
+    }
+
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    public User getUser() { return user; }
+//    public void setUser(User user) { this.user = user; }
 }

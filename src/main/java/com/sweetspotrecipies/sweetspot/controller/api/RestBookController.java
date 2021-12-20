@@ -1,9 +1,12 @@
 package com.sweetspotrecipies.sweetspot.controller.api;
 
 import com.sweetspotrecipies.sweetspot.api.mapper.BookMapper;
+import com.sweetspotrecipies.sweetspot.api.mapper.RecipeMapper;
 import com.sweetspotrecipies.sweetspot.api.model.BookDTO;
 import com.sweetspotrecipies.sweetspot.model.Book;
+import com.sweetspotrecipies.sweetspot.model.Recipe;
 import com.sweetspotrecipies.sweetspot.service.BookService;
+import com.sweetspotrecipies.sweetspot.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,8 @@ public class RestBookController {
     private BookService bookService;
     @Autowired
     private BookMapper bookMapper;
+    @Autowired
+    private RecipeMapper recipeMapper;
     @GetMapping("/")
     public ResponseEntity<Iterable<BookDTO>> index() {
         try {
@@ -30,6 +35,20 @@ public class RestBookController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/{id}/recipes")
+    public ResponseEntity<BookDTO> getRecipes(@PathVariable("id") Integer id) {
+        try {
+            return new ResponseEntity(
+                    recipeMapper.map(
+                            bookService.find(id).getRecipes()
+                    ),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BookDTO> getBook(@PathVariable("id") Integer id) {
         try {
@@ -44,6 +63,7 @@ public class RestBookController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PostMapping("/")
     public ResponseEntity<Void> createBook(@RequestBody BookDTO bookDTO) {
         try {

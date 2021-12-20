@@ -1,7 +1,9 @@
 package com.sweetspotrecipies.sweetspot.service;
 
 import com.sweetspotrecipies.sweetspot.model.Book;
+import com.sweetspotrecipies.sweetspot.model.Recipe;
 import com.sweetspotrecipies.sweetspot.repository.BookRepository;
+import com.sweetspotrecipies.sweetspot.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -37,6 +39,7 @@ public class BookService {
     public Book find(Integer id) {
         return bookRepository.findById(id).orElse(null);
     }
+
 
     public void delete(Integer id) {
         bookRepository.deleteById(id);
