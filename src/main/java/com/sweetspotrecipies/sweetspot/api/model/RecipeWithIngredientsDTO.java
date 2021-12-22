@@ -15,6 +15,8 @@ public class RecipeWithIngredientsDTO {
     private String steps;
     @JsonProperty("imageUrl")
     private String imageUrl;
+    @JsonProperty("published")
+    private Boolean published;
 
     @JsonProperty("bookName")
     private String bookName;
@@ -73,4 +75,7 @@ public class RecipeWithIngredientsDTO {
 
     public Set<IngredientDTO> getIngredients() { return ingredients; }
     public void setIngredients(Set<IngredientDTO> ingredients) { this.ingredients = ingredients; }
+
+    public Boolean getPublished() { return published; }
+    public void setPublished(Boolean published) { this.published = published; }
 }

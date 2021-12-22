@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
@@ -23,6 +24,7 @@ public class RestRecipeController {
     private IngredientService ingredientService;
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Iterable<RecipeWithIngredientsDTO>> index() {
         try {
             return new ResponseEntity(
@@ -36,7 +38,22 @@ public class RestRecipeController {
         }
     }
 
+    @GetMapping("/public")
+    public ResponseEntity<Iterable<RecipeWithIngredientsDTO>> indexPublic() {
+        try {
+            return new ResponseEntity(
+                    recipeMapper.map(
+                            recipeService.listAllPublic()
+                    ),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<RecipeWithIngredientsDTO> getRecipe(@PathVariable("id") Integer id) {
         try {
             Recipe recipeEntity = recipeService.find(id);
@@ -52,6 +69,7 @@ public class RestRecipeController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> createRecipe(@RequestBody RecipeWithIngredientsDTO recipeDTO) {
         try {
             Recipe recipeEntity = recipeMapper.recipeDTOToRecipe(
@@ -76,6 +94,7 @@ public class RestRecipeController {
         }
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable("id") Integer id,
                                                 @RequestBody RecipeWithIngredientsDTO recipeDTO) {
         try {
@@ -99,6 +118,7 @@ public class RestRecipeController {
         }
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteRecipe(@PathVariable("id") Integer id) {
         try {
             Recipe recipeEntity = recipeService.find(id);

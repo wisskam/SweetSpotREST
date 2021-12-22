@@ -13,6 +13,12 @@ public class BookDTO {
     private String subtitle;
     @JsonProperty("imageUrl")
     private String imageUrl;
+    @JsonProperty("userId")
+    private Integer userId;
+    @JsonProperty("userFirstName")
+    private String userFirstName;
+    @JsonProperty("userLastName")
+    private String userLastName;
     
     public Integer getId() {
         return id;
@@ -57,5 +63,14 @@ public class BookDTO {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public Integer getUserId() {  return userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
+
+    public String getUserFirstName() { return userFirstName; }
+    public void setUserFirstName(String userFirstName) { this.userFirstName = userFirstName; }
+
+    public String getUserLastName() { return userLastName; }
+    public void setUserLastName(String userLastName) { this.userLastName = userLastName; }
 }
 

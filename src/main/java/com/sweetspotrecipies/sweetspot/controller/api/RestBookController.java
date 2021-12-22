@@ -4,12 +4,15 @@ import com.sweetspotrecipies.sweetspot.api.mapper.BookMapper;
 import com.sweetspotrecipies.sweetspot.api.mapper.RecipeMapper;
 import com.sweetspotrecipies.sweetspot.api.model.BookDTO;
 import com.sweetspotrecipies.sweetspot.model.Book;
-import com.sweetspotrecipies.sweetspot.model.Recipe;
+import com.sweetspotrecipies.sweetspot.model.User;
+import com.sweetspotrecipies.sweetspot.security.BookUserDetails;
 import com.sweetspotrecipies.sweetspot.service.BookService;
-import com.sweetspotrecipies.sweetspot.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = { "http://localhost:3000" })
@@ -22,9 +25,18 @@ public class RestBookController {
     private BookMapper bookMapper;
     @Autowired
     private RecipeMapper recipeMapper;
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
     @GetMapping("/")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Iterable<BookDTO>> index() {
         try {
+            bookService.listAll().forEach(book -> {
+                System.out.println(book.toString());
+            });
+
             return new ResponseEntity<>(
                     bookMapper.map(
                             bookService.listAll()
@@ -36,8 +48,10 @@ public class RestBookController {
         }
     }
     @GetMapping("/{id}/recipes")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<BookDTO> getRecipes(@PathVariable("id") Integer id) {
         try {
+
             return new ResponseEntity(
                     recipeMapper.map(
                             bookService.find(id).getRecipes()
@@ -50,6 +64,7 @@ public class RestBookController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<BookDTO> getBook(@PathVariable("id") Integer id) {
         try {
             Book bookEntity = bookService.find(id);
@@ -65,19 +80,23 @@ public class RestBookController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Void> createBook(@RequestBody BookDTO bookDTO) {
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Void> createBook(@RequestBody BookDTO bookDTO, Authentication authentication) {
         try {
+            BookUserDetails bookUserDetails = (BookUserDetails) authentication.getPrincipal();
+            bookDTO.setUserId(bookUserDetails.getId());
+
             bookService.save(
-                    bookMapper.bookDTOToBook(
-                            bookDTO
-                    )
+                    bookMapper.bookDTOToBook(bookDTO)
             );
+
             return new ResponseEntity<>(null, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Integer id,
                                                 @RequestBody BookDTO bookDTO) {
         try {
@@ -101,6 +120,7 @@ public class RestBookController {
         }
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBook(@PathVariable("id") Integer id) {
         try {
             Book bookEntity = bookService.find(id);

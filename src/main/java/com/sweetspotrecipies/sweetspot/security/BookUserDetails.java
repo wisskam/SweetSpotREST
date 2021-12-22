@@ -17,15 +17,19 @@ public class BookUserDetails implements UserDetails {
     @JsonIgnore
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
+    private final User user;
+
     public BookUserDetails(
             Integer id, String email, String password,
-            Collection<? extends GrantedAuthority> authorities
-    ) {
+            Collection<? extends GrantedAuthority> authorities,
+            User user) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.user = user;
     }
+
     public static BookUserDetails build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
@@ -34,7 +38,7 @@ public class BookUserDetails implements UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities);
+                authorities, user);
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -78,5 +82,9 @@ public class BookUserDetails implements UserDetails {
             return false;
         BookUserDetails user = (BookUserDetails) o;
         return Objects.equals(id, user.id);
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -22,12 +22,16 @@ public class User {
     private String lastName;
     private Date deleted;
     private Set<Role> roles = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
+
     public User() {
     }
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -101,4 +105,10 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public Set<Book> getBooks() {
+        return books;
+    }
+    public void setBooks(Set<Book> books) { this.books = books; }
 }

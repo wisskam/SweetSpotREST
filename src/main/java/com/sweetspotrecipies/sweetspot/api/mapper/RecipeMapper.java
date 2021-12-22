@@ -16,6 +16,7 @@ public interface RecipeMapper {
             @Mapping(target="name", source="entity.name"),
             @Mapping(target="description", source="entity.description"),
             @Mapping(target="steps", source="entity.steps"),
+            @Mapping(target="published", source="entity.published"),
             @Mapping(target="bookName", source="book.name"),
             @Mapping(target="bookId", source="book.id"),
             @Mapping(target="ingredients", source="entity.ingredients"),
@@ -26,6 +27,7 @@ public interface RecipeMapper {
             @Mapping(target="name", source="entity.name"),
             @Mapping(target="description", source="entity.description"),
             @Mapping(target="steps", source="entity.steps"),
+            @Mapping(target="published", source="entity.published"),
             @Mapping(target="bookName", source="book.name"),
             @Mapping(target="bookId", source="book.id"),
     })
@@ -35,6 +37,7 @@ public interface RecipeMapper {
             @Mapping(target="name", source="dto.name"),
             @Mapping(target="description", source="dto.description"),
             @Mapping(target="steps", source="dto.steps"),
+            @Mapping(target="published", source="dto.published"),
             @Mapping(target="imageUrl", source="dto.imageUrl"),
             @Mapping(target="book.id", source="dto.bookId"),
             @Mapping(target="ingredients", source="dto.ingredients"),
@@ -42,10 +45,5 @@ public interface RecipeMapper {
     Recipe recipeDTOToRecipe(RecipeWithIngredientsDTO dto);
 
     List<RecipeDTO> map(Iterable<Recipe> recipes);
-
-
-
-
-
 
 }

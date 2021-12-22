@@ -16,6 +16,7 @@ public class Recipe implements java.io.Serializable{
     private String steps;
     private String imageUrl;
     private Book book;
+    private boolean published;
 //    private User author;
     private Set<Ingredient> ingredients = new HashSet<>();
     private Date createdAt;
@@ -105,13 +106,17 @@ public class Recipe implements java.io.Serializable{
         this.book = book;
     }
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     public Set<Ingredient> getIngredients() {
         return ingredients;
     }
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
+
+    @Column(name = "published")
+    public boolean isPublished() { return published; }
+    public void setPublished(boolean published) { this.published = published; }
 
     @Override
     public String toString() {

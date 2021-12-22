@@ -13,6 +13,8 @@ public class RecipeDTO {
     private String steps;
     @JsonProperty("imageUrl")
     private String imageUrl;
+    @JsonProperty("published")
+    private Boolean published;
 
     @JsonProperty("bookName")
     private String bookName;
@@ -64,5 +66,7 @@ public class RecipeDTO {
     public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
-    
+
+    public Boolean getPublished() { return published; }
+    public void setPublished(Boolean published) { this.published = published; }
 }

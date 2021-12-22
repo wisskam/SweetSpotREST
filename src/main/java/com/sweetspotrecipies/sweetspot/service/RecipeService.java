@@ -19,6 +19,9 @@ public class RecipeService {
     public Iterable<Recipe> listAll() {
         return recipeRepository.findAll();
     }
+    public Iterable<Recipe> listAllPublic() {
+        return recipeRepository.findByPublished(true);
+    }
 
     public void save(Recipe recipe) {
         if (recipe.getModifiedAt() == null) {

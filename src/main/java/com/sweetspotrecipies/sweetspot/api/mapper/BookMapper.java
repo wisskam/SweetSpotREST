@@ -16,6 +16,9 @@ public interface BookMapper {
             @Mapping(target="description", source="entity.description"),
             @Mapping(target="subtitle", source="entity.subtitle"),
             @Mapping(target="imageUrl", source="entity.imageUrl"),
+            @Mapping(target="userId", source="user.id"),
+            @Mapping(target="userFirstName", source="user.firstName"),
+            @Mapping(target="userLastName", source="user.lastName"),
     })
     BookDTO bookToBookDTO(Book entity);
     @Mappings({
@@ -24,6 +27,7 @@ public interface BookMapper {
             @Mapping(target="description", source="dto.description"),
             @Mapping(target="subtitle", source="dto.subtitle"),
             @Mapping(target="imageUrl", source="dto.imageUrl"),
+            @Mapping(target="user.id", source="dto.userId"),
     })
     Book bookDTOToBook(BookDTO dto);
     List<BookDTO> map(Iterable<Book> books);

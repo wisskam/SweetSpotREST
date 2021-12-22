@@ -16,21 +16,19 @@ public class Book {
     private String imageUrl;
 
     private Set<Recipe> recipes = new HashSet<>();
-//    private User user;
-
-
+    private User user;
 
     public Book(Date modified) {
         this.modifiedAt = modified;
     }
-    public Book(Date created, Date modified, String name, String description, String subtitle, String imageUrl /*, int userID */) {
+    public Book(Date created, Date modified, String name, String description, String subtitle, String imageUrl , User user ) {
         this.createdAt = created;
         this.modifiedAt = modified;
         this.name = name;
         this.description    = description;
         this.subtitle       = subtitle;
         this.imageUrl       = imageUrl;
-//        this.userID = userID;
+        this.user = user;
     }
 
     public Book() {
@@ -88,7 +86,7 @@ public class Book {
     public String getImageUrl() {return imageUrl;}
     public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     public Set<Recipe> getRecipes() {
         return recipes;
     }
@@ -96,8 +94,9 @@ public class Book {
         this.recipes = recipes;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    public User getUser() { return user; }
-//    public void setUser(User user) { this.user = user; }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
 }

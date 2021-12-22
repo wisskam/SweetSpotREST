@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -104,6 +105,7 @@ public class AuthController {
             });
         }
         user.setRoles(roles);
+        user.setCreated(new Date());
         userRepository.save(user);
         return ResponseEntity.ok(
                 new MessageResponse("Rejestracja Użytkownika powiodła się.")
