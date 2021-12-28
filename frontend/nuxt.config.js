@@ -3,8 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - frontend',
-    title: 'frontend',
+    titleTemplate: '%s - Sweet Spot',
+    title: 'Sweet Spot',
     htmlAttrs: {
       lang: 'en'
     },
@@ -15,7 +15,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/donut.ico' }
     ]
   },
 
@@ -40,11 +40,31 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
-
+  //
+  router: {
+    middleware: ['auth']
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: 'http://localhost:8080/api/v1/', // Used as fallback if no runtime config is provided
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        user: {
+          property: false,
+          autoFetch: true
+        },
+        endpoints: {
+          login: { url: 'auth/login', method: 'post', propertyName: 'data.token' },
+          user: { url: 'user/me', method: 'get', propertyName: false },
+          logout: false
+        }
+      }
+    }
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

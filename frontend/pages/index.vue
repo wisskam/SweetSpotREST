@@ -1,77 +1,106 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
+  <v-container>
+    <v-parallax
+      src="https://bratek.waw.pl/wp-content/uploads/2014/07/photodune-6761938-food-background-on-dark-slate-m-1.jpg"
+    >
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <v-col
+          class="text-center"
+          cols="12"
+        >
+          <h1 class="text-h2 font-weight-thin mb-4">
+            Sweet Spot - Przepisy
+          </h1>
+          <h4 class="text-h5 font-weight-medium">
+            Zorganizuj swoje pyszności!
+          </h4>
+        </v-col>
+      </v-row>
+    </v-parallax>
+    <v-row>
+    <v-card
+      v-for="recipe in publicRecipes"
+      class="mx-auto my-12"
+      max-width="374"
+    >
+      <template slot="progress">
+        <v-progress-linear
+          color="deep-purple"
+          height="10"
+          indeterminate
+        ></v-progress-linear>
+      </template>
+
+      <v-img
+        height="250"
+        :src="recipe.imageUrl"
+      ></v-img>
+
+      <v-card-title>{{ recipe.name }}</v-card-title>
+
+      <v-card-text>
+        <v-row
+          align="center"
+          class="mx-0"
+        >
+          <v-rating
+            :value="4.5"
+            color="amber"
+            dense
+            half-increments
+            readonly
+            size="14"
+          ></v-rating>
+
+          <div class="grey--text ms-4">
+            4.5 (413)
           </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+        </v-row>
+
+        <div class="my-4 text-subtitle-1">
+          {{ recipe.bookAuthorFirstName + ' ' + recipe.bookAuthorLastName }}
+        </div>
+
+        <div>{{ recipe.description }}</div>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-actions class="d-flex justify-center">
+        <v-btn
+          color="orange lighten-1"
+          dark
+          @click="$router.push({name: 'recipes-id', params: { id: recipe.id }})"
+        >
+          Zobacz przepis
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    </v-row>
+  </v-container>
+
 </template>
+<script>
+export default {
+  auth: false,
+  data(){
+    return{
+      publicRecipes: [],
+    }
+  },
+  mounted() {
+    this.fetchPublicRecipes();
+  },
+  methods: {
+    async fetchPublicRecipes(limit=10){
+      const recipes = await this.$axios.get('recipe/public');
+      this.publicRecipes = recipes.data.sort();
+
+    }
+  }
+
+}
+</script>

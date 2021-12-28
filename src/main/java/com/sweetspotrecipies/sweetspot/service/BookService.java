@@ -36,6 +36,12 @@ public class BookService {
         bookRepository.save(book);
     }
 
+    public Book saveAndGet(Book book) {
+        save(book);
+        return book;
+    }
+
+
     public Book find(Integer id) {
         return bookRepository.findById(id).orElse(null);
     }

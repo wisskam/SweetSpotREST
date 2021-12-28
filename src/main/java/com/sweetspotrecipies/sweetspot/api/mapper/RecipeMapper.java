@@ -17,6 +17,7 @@ public interface RecipeMapper {
             @Mapping(target="description", source="entity.description"),
             @Mapping(target="steps", source="entity.steps"),
             @Mapping(target="published", source="entity.published"),
+            @Mapping(target="modifiedAt", source="entity.modifiedAt"),
             @Mapping(target="bookName", source="book.name"),
             @Mapping(target="bookId", source="book.id"),
             @Mapping(target="ingredients", source="entity.ingredients"),
@@ -28,7 +29,10 @@ public interface RecipeMapper {
             @Mapping(target="description", source="entity.description"),
             @Mapping(target="steps", source="entity.steps"),
             @Mapping(target="published", source="entity.published"),
+            @Mapping(target="modifiedAt", source="entity.modifiedAt"),
             @Mapping(target="bookName", source="book.name"),
+            @Mapping(target="bookAuthorFirstName", source="book.user.firstName"),
+            @Mapping(target="bookAuthorLastName", source="book.user.lastName"),
             @Mapping(target="bookId", source="book.id"),
     })
     RecipeDTO recipeToRecipeDTO(Recipe entity);

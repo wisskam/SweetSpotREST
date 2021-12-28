@@ -2,6 +2,7 @@ package com.sweetspotrecipies.sweetspot.controller.api;
 
 import com.sweetspotrecipies.sweetspot.api.mapper.UserMapper;
 import com.sweetspotrecipies.sweetspot.api.mapper.RecipeMapper;
+import com.sweetspotrecipies.sweetspot.api.model.BookDTO;
 import com.sweetspotrecipies.sweetspot.api.model.UserDTO;
 import com.sweetspotrecipies.sweetspot.model.User;
 import com.sweetspotrecipies.sweetspot.security.BookUserDetails;
@@ -14,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("${url.prefix.api.v1}/user")
 public class RestUserController {
@@ -33,6 +34,22 @@ public class RestUserController {
             return new ResponseEntity<>(
                     userMapper.map(
                             userService.listAll()
+                    ),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+        try {
+            BookUserDetails bookUserDetails = (BookUserDetails) authentication.getPrincipal();
+            User userEntity = userService.find(bookUserDetails.getId());
+            return new ResponseEntity(
+                    userMapper.userToUserDTO(
+                            userEntity
                     ),
                     HttpStatus.OK
             );

@@ -1,8 +1,10 @@
 package com.sweetspotrecipies.sweetspot.controller.api;
 
+import com.sweetspotrecipies.sweetspot.api.mapper.IngredientMapper;
 import com.sweetspotrecipies.sweetspot.api.mapper.RecipeMapper;
 import com.sweetspotrecipies.sweetspot.api.model.RecipeDTO;
 import com.sweetspotrecipies.sweetspot.api.model.RecipeWithIngredientsDTO;
+import com.sweetspotrecipies.sweetspot.model.Ingredient;
 import com.sweetspotrecipies.sweetspot.model.Recipe;
 import com.sweetspotrecipies.sweetspot.service.IngredientService;
 import com.sweetspotrecipies.sweetspot.service.RecipeService;
@@ -22,6 +24,8 @@ public class RestRecipeController {
     private RecipeMapper recipeMapper;
     @Autowired
     private IngredientService ingredientService;
+    @Autowired
+    private IngredientMapper ingredientMapper;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
@@ -80,7 +84,7 @@ public class RestRecipeController {
 //                ingredient.setRecipe(recipeEntity);
 //            });
 
-            recipeService.save(recipeEntity);
+            Recipe newRecipe = recipeService.saveAndGet(recipeEntity);
 
             recipeEntity.getIngredients().forEach(ingredient -> {
                 ingredient.setRecipe(recipeEntity);
@@ -88,7 +92,7 @@ public class RestRecipeController {
             });
 
 
-            return new ResponseEntity<>(null, HttpStatus.CREATED);
+            return new ResponseEntity(recipeMapper.recipeToRecipeDTO(newRecipe), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -98,6 +102,8 @@ public class RestRecipeController {
     public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable("id") Integer id,
                                                 @RequestBody RecipeWithIngredientsDTO recipeDTO) {
         try {
+//            System.out.println(recipeDTO.toString());
+
             Recipe recipeEntity = recipeService.find(id);
             if (recipeEntity == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -107,6 +113,25 @@ public class RestRecipeController {
                             recipeDTO
                     )
             );
+
+            recipeDTO.getIngredients().forEach(ingr -> {
+                Ingredient ingredient = null;
+                if(ingr.getId() != null){
+                    ingredient = ingredientService.find(ingr.getId());
+
+                    ingredient.setAmount(ingr.getAmount());
+                    ingredient.setName(ingr.getName());
+                    ingredient.setUnit(ingr.getUnit());
+                    ingredient.setRecipe(recipeEntity);
+                }
+                else{
+                    ingredient = ingredientMapper.ingredientDTOToIngredient(ingr);
+                    ingredient.setRecipe(recipeEntity);
+                }
+                ingredientService.save(ingredient);
+
+            });
+
             return new ResponseEntity(
                     recipeMapper.recipeToRecipeWithIngredientsDTO(
                             recipeEntity

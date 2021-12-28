@@ -1,5 +1,6 @@
 package com.sweetspotrecipies.sweetspot.service;
 
+import com.sweetspotrecipies.sweetspot.model.Book;
 import com.sweetspotrecipies.sweetspot.model.Recipe;
 import com.sweetspotrecipies.sweetspot.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,10 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
+    public Recipe saveAndGet(Recipe recipe) {
+        save(recipe);
+        return recipe;
+    }
     public Recipe find(Integer id) {
         return recipeRepository.findById(id).orElse(null);
     }

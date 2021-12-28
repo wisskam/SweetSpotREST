@@ -59,5 +59,16 @@ public class IngredientDTO {
     public void setRecipeId(Integer recipeId) {
         this.recipeId = recipeId;
     }
-    
+
+    @Override
+    public String toString() {
+        return "IngredientDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", amount=" + amount +
+                ", unit='" + unit + '\'' +
+                ", recipeName='" + recipeName + '\'' +
+                ", recipeId=" + recipeId +
+                '}';
+    }
 }

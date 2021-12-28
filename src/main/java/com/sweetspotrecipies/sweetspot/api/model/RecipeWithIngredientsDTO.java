@@ -2,6 +2,7 @@ package com.sweetspotrecipies.sweetspot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
 import java.util.Set;
 
 public class RecipeWithIngredientsDTO {
@@ -17,6 +18,8 @@ public class RecipeWithIngredientsDTO {
     private String imageUrl;
     @JsonProperty("published")
     private Boolean published;
+    @JsonProperty("modifiedAt")
+    private Date modifiedAt;
 
     @JsonProperty("bookName")
     private String bookName;
@@ -78,4 +81,23 @@ public class RecipeWithIngredientsDTO {
 
     public Boolean getPublished() { return published; }
     public void setPublished(Boolean published) { this.published = published; }
+
+    public Date getModifiedAt() { return modifiedAt; }
+    public void setModifiedAt(Date modifiedAt) { this.modifiedAt = modifiedAt; }
+
+    @Override
+    public String toString() {
+        return "RecipeWithIngredientsDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", steps='" + steps + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", published=" + published +
+                ", modifiedAt=" + modifiedAt +
+                ", bookName='" + bookName + '\'' +
+                ", bookId=" + bookId +
+                ", ingredients=" + ingredients +
+                '}';
+    }
 }

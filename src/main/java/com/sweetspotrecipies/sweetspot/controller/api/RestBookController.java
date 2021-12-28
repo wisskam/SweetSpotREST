@@ -68,12 +68,18 @@ public class RestBookController {
     public ResponseEntity<BookDTO> getBook(@PathVariable("id") Integer id) {
         try {
             Book bookEntity = bookService.find(id);
-            return new ResponseEntity(
-                    bookMapper.bookToBookDTO(
-                            bookEntity
-                    ),
-                    HttpStatus.OK
-            );
+            if(bookEntity != null){
+                return new ResponseEntity(
+                        bookMapper.bookToBookDTO(
+                                bookEntity
+                        ),
+                        HttpStatus.OK
+                );
+            }
+            else{
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -86,11 +92,11 @@ public class RestBookController {
             BookUserDetails bookUserDetails = (BookUserDetails) authentication.getPrincipal();
             bookDTO.setUserId(bookUserDetails.getId());
 
-            bookService.save(
+            Book newBook = bookService.saveAndGet(
                     bookMapper.bookDTOToBook(bookDTO)
             );
 
-            return new ResponseEntity<>(null, HttpStatus.CREATED);
+            return new ResponseEntity(bookMapper.bookToBookDTO(newBook), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
