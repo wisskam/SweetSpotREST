@@ -31,15 +31,14 @@ public class RestBookController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Iterable<BookDTO>> index() {
+    public ResponseEntity<Iterable<BookDTO>> index(Authentication authentication) {
         try {
-            bookService.listAll().forEach(book -> {
-                System.out.println(book.toString());
-            });
+            BookUserDetails bookUserDetails = (BookUserDetails) authentication.getPrincipal();
+            int userID = bookUserDetails.getId();
 
             return new ResponseEntity<>(
                     bookMapper.map(
-                            bookService.listAll()
+                            bookService.listAll(userID)
                     ),
                     HttpStatus.OK
             );
@@ -49,7 +48,7 @@ public class RestBookController {
     }
     @GetMapping("/{id}/recipes")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<BookDTO> getRecipes(@PathVariable("id") Integer id) {
+    public ResponseEntity<BookDTO> getRecipes(@PathVariable("id") Integer id, Authentication authentication) {
         try {
 
             return new ResponseEntity(
@@ -65,7 +64,7 @@ public class RestBookController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<BookDTO> getBook(@PathVariable("id") Integer id) {
+    public ResponseEntity<BookDTO> getBook(@PathVariable("id") Integer id, Authentication authentication) {
         try {
             Book bookEntity = bookService.find(id);
             if(bookEntity != null){
@@ -104,7 +103,7 @@ public class RestBookController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Integer id,
-                                                @RequestBody BookDTO bookDTO) {
+                                                @RequestBody BookDTO bookDTO, Authentication authentication) {
         try {
             Book bookEntity = bookService.find(id);
             if (bookEntity == null) {
@@ -127,7 +126,7 @@ public class RestBookController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteBook(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteBook(@PathVariable("id") Integer id, Authentication authentication) {
         try {
             Book bookEntity = bookService.find(id);
             if (bookEntity == null) {

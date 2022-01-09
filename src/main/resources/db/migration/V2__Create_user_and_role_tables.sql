@@ -32,3 +32,11 @@ insert into role (created, modified, name)
 values (now(), now(), "ROLE_MODERATOR");
 insert into role (created, modified, name)
 values (now(), now(), "ROLE_ADMIN");
+
+INSERT INTO user (id, created, modified, email, password, first_name, last_name, deleted) VALUES (1, '2021-12-22 22:20:47', '2021-12-22 22:20:47', 'admin@test.pl', '$2a$10$2Jj.0LCoKK/ENY2BHzKtHuD1TZPPq3Nc6s/5ZL5zl9kO6OLAag9iO', 'John', 'Adminolta', null);
+INSERT INTO user (id, created, modified, email, password, first_name, last_name, deleted) VALUES (2, '2021-12-22 22:20:47', '2021-12-22 22:20:47', 'testuser@test.pl', '$2a$10$00q/IpfirpbXAKTW5ofTbuqXS1iOdTBnQydNnsFE06f6GDbCYLhA.', 'Jerry', 'Martinez', null);
+
+insert into user_role (user_id, role_id)
+    values (1 , 1);
+insert into user_role (user_id, role_id)
+   values (2 , 3);

@@ -21,17 +21,27 @@
             </v-card-text>
             <v-card-actions>
               <v-btn
+                v-if="recipe.userID == userID"
                 text
                 color="deep-purple accent-4"
-                @click="$router.push({name: 'books-id', params: { id: '' }})"
+                @click="$router.push({name: 'books-id', params: { id: recipe.bookId }})"
               >
                 Wróć do książki
+              </v-btn>
+              <v-btn
+                v-else
+                text
+                color="deep-purple accent-4"
+                @click="$router.push({name: 'index'})"
+              >
+                Wróć na stronę główną
               </v-btn>
             </v-card-actions>
             <v-card-actions>
               <v-row no-gutters class="d-flex justify-end">
                 <v-col cols="3">
-                  <Dialog btnLabel="Usuń"
+                  <Dialog v-if="recipe.userID == userID"
+                          btnLabel="Usuń"
                           title="Czy chcesz usunąć tą książkę?"
                           description="Spowoduje to usunięcie wszystkich zapisanych w niej przepisów."
                           color="error"
@@ -42,6 +52,7 @@
                 </v-col>
                 <v-col cols="3">
                   <v-btn
+                    v-if="recipe.userID == userID"
                     text
                     color="primary"
                     @click="$router.push({name: 'recipes-update-id', params:{ id: id}})"
@@ -130,12 +141,14 @@ export default {
     return {
       id: null,
       recipe: {},
+      userID: null,
       color: "#D7CCC8",
     }
   },
   created() {
     this.id = this.$route.params.id;
     this.fetchRecipe(this.id)
+    this.getchUser()
   },
   mounted() {
   },
@@ -143,7 +156,9 @@ export default {
     async fetchRecipe(id) {
       try {
         const recipe = await this.$axios.$get(`recipe/${id}`)
+        const book = await this.$axios.$get(`book/${recipe.bookId}`)
         this.recipe = recipe
+        this.recipe.userID = book.userId
         this.recipe.steps = recipe.steps.split('<br>');
       } catch (err) {
         if (err.response.status === 404) {
@@ -151,6 +166,17 @@ export default {
         }
       }
     },
+    async getchUser(){
+      try {
+        const user = await this.$axios.$get(`user/me`)
+        this.userID = user.id
+      } catch (err) {
+        if (err.response.status === 404) {
+          return this.$nuxt.error({statusCode: 404, message: err.message})
+        }
+      }
+    }
+
   }
 }
 </script>

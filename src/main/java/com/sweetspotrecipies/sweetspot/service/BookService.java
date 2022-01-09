@@ -7,7 +7,9 @@ import com.sweetspotrecipies.sweetspot.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -18,8 +20,16 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public Iterable<Book> listAll() {
-        return bookRepository.findAll();
+    public Iterable<Book> listAll(int userID) {
+        Iterable<Book> books = bookRepository.findAll();
+        List<Book> result = new ArrayList<Book>();
+        books.forEach(book -> {
+            if(book.getUser().getId() == userID) {
+                System.out.println("UserID" + userID);
+                result.add(book);
+            }
+        });
+        return result;
     }
 
     public void save(Book book) {
